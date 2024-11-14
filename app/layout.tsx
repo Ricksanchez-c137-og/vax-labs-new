@@ -7,7 +7,8 @@ import {
   SignedIn,
   SignedOut,
   UserButton
-} from '@clerk/nextjs'
+} from '@clerk/nextjs';
+import { Button } from '@/components/ui/button'; // Adjust if the path to your button component is different
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,19 +36,23 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          {/* Header for positioning Sign In / User Button */}
+          <header className="absolute top-4 right-4">
+            <SignedOut>
+              {/* Wrap SignInButton in the Shadcn Button without destructuring */}
+              <SignInButton>
+                <Button>Sign In</Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          {children}
+        </body>
+      </html>
     </ClerkProvider>
-
   );
 }

@@ -1,4 +1,5 @@
 import Navbar from "@/app/components/Navbar";
+import { SignInButton, SignUpButton } from "@clerk/nextjs"; // Import Clerk's SignIn and SignUp buttons
 import { Button } from "@/components/ui/button";
 
 export default function Companies() {
@@ -11,12 +12,19 @@ export default function Companies() {
           VaxLabs provides custom challenges and simulations tailored for corporate training to enhance cybersecurity skills among employees.
         </p>
         <div className="flex justify-center space-x-4">
-          <Button className="bg-primary text-foreground px-6 py-3 rounded-full">
-            Register Now
-          </Button>
-          <Button className="bg-secondary text-foreground px-6 py-3 rounded-full hover:bg-primary hover:text-background transition-all">
-            Login
-          </Button>
+          {/* Register button that redirects to the sign-up page */}
+          <SignUpButton mode="modal">
+            <Button className="bg-primary text-foreground px-6 py-3 rounded-full">
+              Register Now
+            </Button>
+          </SignUpButton>
+
+          {/* Login button that redirects to the sign-in page */}
+          <SignInButton mode="redirect">
+            <Button className="bg-secondary text-foreground px-6 py-3 rounded-full hover:bg-primary hover:text-background transition-all">
+              Login
+            </Button>
+          </SignInButton>
         </div>
       </section>
     </div>
