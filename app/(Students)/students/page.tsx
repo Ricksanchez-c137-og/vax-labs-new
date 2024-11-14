@@ -11,9 +11,9 @@ export default function Students() {
           VaxLabs offers challenges that help students develop essential cybersecurity skills through hands-on experience.
         </p>
         <Button className="bg-primary text-foreground px-6 py-3 rounded-full">
-            Join Now
-        </Button>
-        <Button className="bg-secondary text-foreground px-6 py-3 rounded-full hover:bg-primary hover:text-background transition-all">
+            Register Now
+          </Button>
+          <Button className="bg-secondary text-foreground px-6 py-3 rounded-full hover:bg-primary hover:text-background transition-all">
             Login
           </Button>
       </section>
