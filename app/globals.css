@@ -2,20 +2,136 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 260 10% 10%; /* Dark background */
+    --foreground: 280 5% 90%; /* Light text color */
+    --card: 260 10% 15%; /* Slightly lighter dark color for cards */
+    --card-foreground: 280 5% 90%; /* Card text color */
+    --popover: 260 10% 15%; /* Popover color */
+    --popover-foreground: 280 5% 90%; /* Popover text color */
+    --primary: 270 50% 40%; /* Purple primary color */
+    --primary-foreground: 280 5% 90%; /* Light text on primary */
+    --secondary: 260 10% 20%; /* Darker purple secondary */
+    --secondary-foreground: 280 5% 90%;
+    --muted: 260 10% 20%; /* Muted dark color */
+    --muted-foreground: 280 5% 80%; /* Lighter muted text */
+    --accent: 270 50% 40%; /* Accent color - purple */
+    --accent-foreground: 280 5% 90%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 10% 25%; /* Dark border color */
+    --input: 260 10% 25%; /* Input background */
+    --ring: 270 50% 40%; /* Ring color in purple */
+    --chart-1: 260 50% 50%;
+    --chart-2: 280 40% 50%;
+    --chart-3: 290 35% 40%;
+    --chart-4: 310 45% 55%;
+    --chart-5: 320 55% 60%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 260 10% 10%; /* Dark background for dark mode */
+    --foreground: 280 5% 90%; /* Light text color */
+    --card: 260 10% 15%; /* Slightly lighter dark color for cards */
+    --card-foreground: 280 5% 90%; /* Card text color */
+    --popover: 260 10% 15%; /* Popover color */
+    --popover-foreground: 280 5% 90%; /* Popover text color */
+    --primary: 270 50% 40%; /* Purple primary color */
+    --primary-foreground: 280 5% 90%; /* Light text on primary */
+    --secondary: 260 10% 20%; /* Darker purple secondary */
+    --secondary-foreground: 280 5% 90%;
+    --muted: 260 10% 20%; /* Muted dark color */
+    --muted-foreground: 280 5% 80%; /* Lighter muted text */
+    --accent: 270 50% 40%; /* Accent color - purple */
+    --accent-foreground: 280 5% 90%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 10% 25%; /* Dark border color */
+    --input: 260 10% 25%; /* Input background */
+    --ring: 270 50% 40%; /* Ring color in purple */
+    --chart-1: 260 50% 50%;
+    --chart-2: 280 40% 50%;
+    --chart-3: 290 35% 40%;
+    --chart-4: 310 45% 55%;
+    --chart-5: 320 55% 60%;
   }
 }
 
+@layer base {
+  * {
+    @apply border-border;
+    animation: fade-in-up 1s ease forwards;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
+
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(270, 50%, 35%);
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(260, 10%, 10%);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary)) hsl(260, 10%, 10%);
+}
+
+/* Animation for hero section */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease forwards;
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 1s ease forwards;
 }
