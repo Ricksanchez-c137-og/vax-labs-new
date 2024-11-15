@@ -13,7 +13,7 @@ export default function Companies() {
         </p>
         <div className="flex justify-center space-x-4">
           {/* Register button that redirects to the sign-up page */}
-          <SignUpButton mode="modal">
+          <SignUpButton mode="redirect">
             <Button className="bg-primary text-foreground px-6 py-3 rounded-full">
               Register Now
             </Button>
