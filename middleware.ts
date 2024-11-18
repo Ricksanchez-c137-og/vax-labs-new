@@ -1,29 +1,35 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-// Add additional public routes here
-const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)', 
-  '/sign-up(.*)', 
-  '/about(.*)', 
-  '/companies(.*)', 
-  '/Dashboard(.*)',
-  '/students(.*)',
-  '/(.*)'
-])
+const publicRoutes = [
+  "/students",
+  "/students/student-login",
+  "/students/student-registration",
+  "/companies",
+  "/companies/company-login",
+  "/companies/company-registration",
+  "/about",
+];
 
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect()
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+
+  if (publicRoutes.some((route) => req.nextUrl.pathname.startsWith(route))) {
+    return NextResponse.next();
   }
-})
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/students/student-login", req.url));
+  }
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET as string);
+    return NextResponse.next();
+  } catch {
+    return NextResponse.redirect(new URL("/students/student-login", req.url));
+  }
+}
 
 export const config = {
-  matcher: [
-    // Allow public access to sign-in, sign-up, and sso-callback routes
-    "/(sign-in|sign-up|sso-callback)(.*)",
-    // Always run for Students, Dashboard, and other private routes
-    "/(students|Dashboard|companies|api|trpc)(.*)",
-    // Skip Next.js internals and static assets
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-  ],
+  matcher: ["/students/dashboard", "/companies/dashboard"],
 };

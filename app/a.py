@@ -12,8 +12,8 @@ def list_files_and_print_content(base_dir, ignore_files=[], ignore_dirs=[]):
                 print(f"\n=== {file_path} ===")
                 # try:
                 #     with open(file_path, 'r') as f:
-                #         # content = f.read()
-                #         # print(content)
+                #         content = f.read()
+                #         print(content)
                 # except Exception as e:
                 #     print(f"Could not read {file_path}: {e}")
 
@@ -21,7 +21,7 @@ def list_files_and_print_content(base_dir, ignore_files=[], ignore_dirs=[]):
 base_dir = '.'
 
 # Specify files and directories to ignore
-ignore_files = ['ignored_file.txt', 'example.ignore']
+ignore_files = ['ignored_file.txt', 'example.ignore', 'favicon.png']
 ignore_dirs = ['node_modules', '.next', '.git']
 
 # Run the function to list files and print their content
