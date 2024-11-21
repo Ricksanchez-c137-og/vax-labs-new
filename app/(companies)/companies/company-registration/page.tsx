@@ -21,7 +21,7 @@ export default function Register() {
 
       if (res.ok) {
         alert("Registration successful. Please login.");
-        window.location.href = "/students/student-login";
+        window.location.href = "/companies/company-login";
       } else {
         const data = await res.json();
         setError(data.error || "An error occurred.");

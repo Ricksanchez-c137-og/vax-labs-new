@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { serialize } from "cookie";
-import dotenv from "dotenv";
+import  dotenv from "dotenv";
 
 dotenv.config();
 
