@@ -1,5 +1,6 @@
 import { verifyToken } from "@/lib/authMiddleWare";
 import { cookies } from "next/headers";
+import { FaTachometerAlt, FaBook, FaTrophy, FaTasks, FaChartBar, FaRoute, FaUser, FaComment, FaFire } from "react-icons/fa";
 
 export default async function StudentsDashboard() {
   const token = (await cookies()).get("token")?.value;
@@ -13,24 +14,53 @@ export default async function StudentsDashboard() {
   return (
     <div className="min-h-screen flex bg-background text-foreground font-ubuntu">
       {/* Sidebar */}
-      <aside className="w-1/5 bg-card p-6 flex flex-col items-start space-y-4 border-r border-border">
-        <h2 className="text-lg font-bold">Dashboard</h2>
-        <nav className="flex flex-col space-y-4 text-muted-foreground">
-          <a href="#" className="hover:text-primary">Dashboard</a>
-          <a href="#" className="hover:text-primary">My Assignments</a>
-          <a href="#" className="hover:text-primary">Leaderboard</a>
-          <a href="#" className="hover:text-primary">Challenges</a>
-          <a href="#" className="hover:text-primary">Courses</a>
-          <a href="#" className="hover:text-primary">Learning Path</a>
-          <div className="pt-4 space-y-2">
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Streak</button>
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">Points #</button>
-          </div>
+      <aside className="w-1/5 bg-card p-6 flex flex-col items-start space-y-6 border-r border-border">
+        <h2 className="text-lg font-bold mb-6">Dashboard</h2>
+        <nav className="flex flex-col space-y-4">
+        <div className="flex flex-col h-full bg-card text-foreground w-64 py-6 px-4 space-y-6">
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaTachometerAlt className="text-2xl" />
+                <span className="text-sm">Dashboard</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaBook className="text-2xl" />
+                <span className="text-sm">My Assignments</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaChartBar className="text-2xl" />
+                <span className="text-sm">Leaderboard</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaTasks className="text-2xl" />
+                <span className="text-sm">Challenges</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaTrophy className="text-2xl" />
+                <span className="text-sm">Courses</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaRoute className="text-2xl" />
+                <span className="text-sm">Learning Path</span>
+              </a>
+              <div className="mt-auto space-y-4">
+                <button className="flex flex-col items-center space-y-2 bg-accent text-white py-2 px-4 rounded hover:bg-accent-foreground">
+                  <FaFire className="text-2xl" />
+                  <span className="text-sm">Streak</span>
+                </button>
+                <button className="flex flex-col items-center space-y-2 bg-accent text-white py-2 px-4 rounded hover:bg-accent-foreground">
+                  <span className="text-sm font-bold">Points #</span>
+                </button>
+              </div>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaUser className="text-2xl" />
+                <span className="text-sm">My Profile</span>
+              </a>
+              <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+                <FaComment className="text-2xl" />
+                <span className="text-sm">Report Feedback</span>
+              </a>
+            </div>
         </nav>
-        <div className="mt-auto space-y-2 text-sm">
-          <a href="#" className="hover:text-primary">My Profile</a>
-          <a href="#" className="hover:text-primary">Report Feedback</a>
-        </div>
       </aside>
 
       {/* Main Content */}
