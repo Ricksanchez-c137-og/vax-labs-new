@@ -12,12 +12,6 @@ export default async function StudentsDashboard() {
     return <p>Unauthorized. Please log in as a student.</p>;
   }
 
-  // Mock Data for Courses (Replace with dynamic fetch from backend later)
-  const courses = [
-    { id: 1, name: "Cybersecurity Basics" },
-    { id: 2, name: "Advanced Pentesting Techniques" },
-  ];
-
   return (
     <div className="min-h-screen flex bg-background text-foreground font-ubuntu">
       {/* Sidebar */}
@@ -41,7 +35,7 @@ export default async function StudentsDashboard() {
               <FaTasks className="text-2xl" />
               <span className="text-sm">Challenges</span>
             </a>
-            <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+            <a href="/courses" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
               <FaTrophy className="text-2xl" />
               <span className="text-sm">Courses</span>
             </a>
@@ -86,39 +80,64 @@ export default async function StudentsDashboard() {
 
         {/* Grid Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Upcoming Challenges */}
-          <div className="p-6 bg-card rounded-lg shadow">
+         {/* Upcoming Challenges */}
+          <div className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all">
             <h2 className="text-lg font-bold mb-4">Upcoming Challenges</h2>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/challenges/1" className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center"> Challenge 1</Link>
-              <Link href="/challenges/2" className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center">Challenge 2</Link>
+              <Link
+                href="/challenges"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Challenge 1
+              </Link>
+              <Link
+                href="/challenges"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Challenge 2
+              </Link>
             </div>
           </div>
 
           {/* Learning Paths */}
-          <div className="p-6 bg-card rounded-lg shadow">
+          <div className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all">
             <h2 className="text-lg font-bold mb-4">Learning Paths Enrolled</h2>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/learning-paths/1" className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center">Path 1</Link>
-              <Link href="/learning-paths/2" className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center">Path 2</Link>
+              <Link
+                href="/learning-paths"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Path 1
+              </Link>
+              <Link
+                href="/learning-paths"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Path 2
+              </Link>
             </div>
           </div>
 
           {/* Courses Enrolled */}
-          <div className="p-6 bg-card rounded-lg shadow">
+          <div className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all">
             <h2 className="text-lg font-bold mb-4">Courses Enrolled</h2>
             <div className="grid grid-cols-2 gap-4">
-              {courses.map((course) => (
-                <Link
-                  key={course.id}
-                  href={`/courses/${course.id}`}
-                  className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center"
-                >
-                  <span>{course.name}</span>
-                </Link>
-              ))}
+              <Link
+                href="/courses"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Course 1
+              </Link>
+              <Link
+                href="/courses"
+                className="w-full h-24 bg-muted rounded-md hover:shadow-lg flex items-center justify-center text-center transition-all"
+              >
+                Course 2
+              </Link>
             </div>
           </div>
+
+
         </div>
       </main>
     </div>
