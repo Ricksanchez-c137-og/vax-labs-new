@@ -7,15 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  STUDENT
+  COMPANY
+  ADMIN
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   password  String
-  role      Role     // Role can be either STUDENT or COMPANY
+  role      Role
   createdAt DateTime @default(now())
+  enrollments Enrollment[]
 }
 
-enum Role {
-  STUDENT
-  COMPANY
+model Course {
+  id          String       @id @default(cuid())
+  courseId    String       @default("default-course-id") // Temporary default
+  name        String
+  description String
+  startDate   DateTime     @default(now()) // Temporary default
+  endDate     DateTime     @default("2100-01-01T00:00:00.000Z") // Temporary default
+  students    Enrollment[]
+}
+
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
 }
