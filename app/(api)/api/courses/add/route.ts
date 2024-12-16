@@ -13,27 +13,25 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("Adding course:", { courseId, name, description, startDate, endDate });
+    // Convert startDate and endDate into Date objects
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    // Check if the courseId already exists
-    const existingCourse = await prisma.course.findUnique({
-      where: { courseId },
-    });
-
-    if (existingCourse) {
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return new Response(
-        JSON.stringify({ error: "Course ID already exists" }),
+        JSON.stringify({ error: "Invalid date format" }),
         { status: 400 }
       );
     }
 
+    // Create the course
     const course = await prisma.course.create({
       data: {
         courseId,
         name,
         description,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: start,
+        endDate: end,
       },
     });
 
