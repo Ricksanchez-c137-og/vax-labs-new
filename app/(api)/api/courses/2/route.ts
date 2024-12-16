@@ -3,9 +3,18 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: Request, { params }: { params: { courseId: string } }) {
-  const { courseId } = params;
+export async function GET(req: Request) {
+  // Extract `courseId` from the URL path
+  const url = new URL(req.url);
+  const courseId = url.pathname.split("/").pop(); // Gets the last part of the URL (e.g., "1")
+
+  console.log("Extracted courseId from URL:", courseId);
+
   const token = req.headers.get("Authorization")?.split(" ")[1];
+
+  if (!courseId) {
+    return new Response(JSON.stringify({ error: "Invalid course ID" }), { status: 400 });
+  }
 
   try {
     const course = await prisma.course.findUnique({

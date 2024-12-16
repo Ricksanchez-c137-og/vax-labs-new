@@ -11,7 +11,7 @@ export default function AddCourse() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleAddCourse = async (e: React.FormEvent) => {
+  const handleAddCourse = async (e) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
@@ -46,9 +46,7 @@ export default function AddCourse() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background text-foreground font-ubuntu">
       <div className="bg-card p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-primary mb-6 text-center">
-          Add Course
-        </h2>
+        <h2 className="text-3xl font-bold text-primary mb-6 text-center">Add Course</h2>
         <form onSubmit={handleAddCourse} className="space-y-4">
           <input
             type="text"
@@ -103,9 +101,7 @@ export default function AddCourse() {
           {message && (
             <p
               className={`text-center mt-2 ${
-                message.includes("successfully")
-                  ? "text-green-500"
-                  : "text-red-500"
+                message.includes("successfully") ? "text-green-500" : "text-red-500"
               }`}
             >
               {message}

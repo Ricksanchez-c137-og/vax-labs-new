@@ -24,7 +24,7 @@ model User {
 
 model Course {
   id          String       @id @default(cuid())
-  courseId    String       @default("default-course-id") // Temporary default
+  courseId    String       @unique
   name        String
   description String
   startDate   DateTime     @default(now()) // Temporary default
