@@ -21,7 +21,6 @@ export default function Courses() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log("Enrolled Courses:", data); // Debug
       setEnrolledCourses(data);
     }
 
@@ -29,7 +28,7 @@ export default function Courses() {
     fetchEnrolledCourses();
   }, []);
 
-  const handleEnroll = async (courseId: string) => {
+  const handleEnroll = async (courseId) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "POST",
@@ -45,7 +44,7 @@ export default function Courses() {
     }
   };
 
-  const handleOptOut = async (courseId: string) => {
+  const handleOptOut = async (courseId) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "DELETE",
@@ -61,54 +60,82 @@ export default function Courses() {
     }
   };
 
-  const handleViewCourse = (courseId: string) => {
-    console.log("Navigating to courseId:", courseId); // Debug
+  const handleViewCourse = (courseId) => {
     router.push(`/courses/${courseId}?courseId=${courseId}`);
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Courses</h1>
+    <div className="min-h-screen bg-background text-foreground font-ubuntu p-8">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold mb-4 text-primary">Courses</h1>
+        <p className="text-lg text-muted-foreground">
+          Explore your enrolled courses, new courses to start, and upcoming opportunities.
+        </p>
+      </header>
 
-      <h2 className="text-lg font-bold mt-6 mb-2">Enrolled Courses</h2>
-      {enrolledCourses.map((course: any) => (
-        <div key={course.id} className="p-4 border rounded mb-2 flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-bold">{course.name}</h3>
-            <p className="text-sm text-muted-foreground">{course.description}</p>
+      <div className="space-y-12">
+        {/* Enrolled Courses */}
+        <section>
+          <h2 className="text-2xl font-bold text-primary mb-4">Enrolled Courses</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {enrolledCourses.map((course) => (
+              <div
+                key={course.courseId}
+                className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <h3 className="text-lg font-bold text-primary">{course.name}</h3>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {course.description}
+                  </p>
+                </div>
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => handleViewCourse(course.courseId)}
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleOptOut(course.courseId)}
+                    className="text-destructive font-semibold hover:underline"
+                  >
+                    Opt Out
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handleViewCourse(course.courseId)}
-              className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-foreground"
-            >
-              View
-            </button>
-            <button
-              onClick={() => handleOptOut(course.id)}
-              className="bg-destructive text-white px-4 py-2 rounded-lg hover:bg-destructive-foreground"
-            >
-              Opt Out
-            </button>
-          </div>
-        </div>
-      ))}
+        </section>
 
-      <h2 className="text-lg font-bold mt-6 mb-2">Available Courses</h2>
-      {courses
-        .filter((course: any) => !enrolledCourses.some((ec: any) => ec.id === course.id))
-        .map((course: any) => (
-          <div key={course.id} className="p-4 border rounded mb-2">
-            <h3 className="text-lg font-bold">{course.name}</h3>
-            <p className="text-sm text-muted-foreground">{course.description}</p>
-            <button
-              onClick={() => handleEnroll(course.courseId)}
-              className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-foreground"
-            >
-              Enroll Now
-            </button>
+        {/* Available Courses */}
+        <section>
+          <h2 className="text-2xl font-bold text-primary mb-4">Available Courses</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses
+              .filter((course) => !enrolledCourses.some((ec) => ec.id === course.id))
+              .map((course) => (
+                <div
+                  key={course.id}
+                  className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <h3 className="text-lg font-bold text-primary">{course.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {course.description}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleEnroll(course.courseId)}
+                    className="mt-4 text-primary font-semibold hover:underline"
+                  >
+                    Enroll Now
+                  </button>
+                </div>
+              ))}
           </div>
-        ))}
+        </section>
+      </div>
     </div>
   );
 }
