@@ -20,6 +20,7 @@ model User {
   role      Role
   createdAt DateTime @default(now())
   enrollments Enrollment[]
+  challengeParticipations ChallengeParticipation[] // Add this line for the relation
 }
 
 model Course {
@@ -39,4 +40,22 @@ model Enrollment {
   courseId  String
   user      User     @relation(fields: [userId], references: [id])
   course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Challenge {
+  id          String       @id @default(cuid())
+  challengeId String       @unique
+  name        String
+  description String
+  startDate   DateTime     @default(now())
+  endDate     DateTime     @default("2100-01-01T00:00:00.000Z")
+  participants ChallengeParticipation[]
+}
+
+model ChallengeParticipation {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  user        User     @relation(fields: [userId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
 }
