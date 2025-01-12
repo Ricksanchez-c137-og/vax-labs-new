@@ -37,7 +37,7 @@ export default function ChallengeDetails() {
         if (res.ok) {
           const data = await res.json();
           setChallenge(data.challenge);
-          setIsRegistered(data.isEnrolled);
+          setIsRegistered(data.isRegistered);
         } else {
           const errorData = await res.json();
           setMessage(errorData.error || "Challenge not found.");

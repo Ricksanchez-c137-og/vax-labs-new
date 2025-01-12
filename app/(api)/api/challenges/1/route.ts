@@ -1,18 +1,55 @@
 import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
+  // Extract `challengeId` from the URL path
   const url = new URL(req.url);
   const challengeId = url.pathname.split("/").pop();
 
-  try {
-    const challenge = await prisma.challenge.findUnique({ where: { challengeId } });
-    if (!challenge) return new Response(JSON.stringify({ error: "Challenge not found" }), { status: 404 });
+  const token = req.headers.get("Authorization")?.split(" ")[1];
 
-    return new Response(JSON.stringify({ challenge }), { status: 200 });
+  if (!challengeId) {
+    return new Response(JSON.stringify({ error: "Invalid challenge ID" }), { status: 400 });
+  }
+
+  try {
+    console.log("Fetching challenge details...");
+    console.log("Challenge ID:", challengeId);
+
+    const challenge = await prisma.challenge.findUnique({
+      where: { challengeId },
+    });
+
+    console.log("Challenge details:", challenge);
+    if (!challenge) {
+      return new Response(JSON.stringify({ error: "Challenge not found" }), { status: 404 });
+    }
+
+    let isRegistered = false;
+
+    if (token) {
+      const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+      const participation = await prisma.challengeParticipation.findFirst({
+        where: { userId: decoded.id, challengeId: challenge.id },
+      });
+
+      isRegistered = !!participation;
+    }
+
+    return new Response(
+      JSON.stringify({
+        challenge,
+        isRegistered,
+      }),
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error fetching challenge:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+    console.error("Error fetching challenge details:", error);
+    return new Response(
+      JSON.stringify({ error: "Internal server error" }),
+      { status: 500 }
+    );
   }
 }

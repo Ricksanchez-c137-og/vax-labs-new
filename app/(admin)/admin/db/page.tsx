@@ -42,6 +42,7 @@ export default function AdminDBPage() {
                 <th className="border border-border p-2">Email</th>
                 <th className="border border-border p-2">Role</th>
                 <th className="border border-border p-2">Enrollments</th>
+                <th className="border border-border p-2">Challenges</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +56,17 @@ export default function AdminDBPage() {
                       <ul>
                         {user.enrollments.map((enrollment) => (
                           <li key={enrollment.id}>{enrollment.course.name}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      "None"
+                    )}
+                  </td>
+                  <td className="border border-border p-2">
+                    {user.challengeParticipations.length > 0 ? (
+                      <ul>
+                        {user.challengeParticipations.map((participation) => (
+                          <li key={participation.id}>{participation.challenge.name}</li>
                         ))}
                       </ul>
                     ) : (
