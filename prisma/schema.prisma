@@ -56,6 +56,11 @@ model ChallengeParticipation {
   id          String   @id @default(cuid())
   userId      String
   challengeId String
+  flag        String?  // Store generated flag
+  completed   Boolean  @default(false)
   user        User     @relation(fields: [userId], references: [id])
   challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId]) // Compound unique constraint
 }
+
