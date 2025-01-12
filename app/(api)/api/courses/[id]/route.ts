@@ -4,16 +4,15 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
-  // Extract `courseId` from the URL path
   const url = new URL(req.url);
-  const courseId = url.pathname.split("/").pop(); // Gets the last part of the URL (e.g., "1")
-
-  console.log("Extracted courseId from URL:", courseId);
+  const courseId = url.pathname.split("/").pop(); // Get the dynamic ID
 
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
   if (!courseId) {
-    return new Response(JSON.stringify({ error: "Invalid course ID" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Invalid course ID" }), {
+      status: 400,
+    });
   }
 
   try {
@@ -22,7 +21,10 @@ export async function GET(req: Request) {
     });
 
     if (!course) {
-      return new Response(JSON.stringify({ error: "Course not found" }), { status: 404 });
+      return new Response(
+        JSON.stringify({ error: "Course not found" }),
+        { status: 404 }
+      );
     }
 
     let isEnrolled = false;
@@ -37,10 +39,7 @@ export async function GET(req: Request) {
     }
 
     return new Response(
-      JSON.stringify({
-        course,
-        isEnrolled,
-      }),
+      JSON.stringify({ course, isEnrolled }),
       { status: 200 }
     );
   } catch (error) {

@@ -10,12 +10,12 @@ def list_files_and_print_content(base_dir, ignore_files=[], ignore_dirs=[]):
             if file not in ignore_files:
                 file_path = os.path.join(root, file)
                 print(f"\n=== {file_path} ===")
-                try:
-                    with open(file_path, 'r') as f:
-                        content = f.read()
-                        print(content)
-                except Exception as e:
-                    print(f"Could not read {file_path}: {e}")
+                # try:
+                #     with open(file_path, 'r') as f:
+                #         content = f.read()
+                #         print(content)
+                # except Exception as e:
+                #     print(f"Could not read {file_path}: {e}")
 
 # Define the base directory
 base_dir = '.'
