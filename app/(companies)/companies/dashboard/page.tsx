@@ -1,12 +1,12 @@
-import { verifyToken } from "@/lib/authMiddleware";
+import { verifyToken } from "@/lib/authMiddleWare";
 import { cookies } from "next/headers";
 
-export default function CompaniesDashboard() {
-  const token = cookies().get("token")?.value;
+export default async function CompaniesDashboard() {
+  const token = (await cookies()).get("token")?.value;
 
   const user = token ? verifyToken(token) : null;
 
-  if (!user || user.role !== "COMPANY") {
+  if (!user || typeof user === "string" || user.role !== "COMPANY") {
     return <p>Unauthorized. Please log in as a company.</p>;
   }
 
