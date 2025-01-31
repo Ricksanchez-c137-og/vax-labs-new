@@ -42,6 +42,7 @@ export default function AdminDBPage() {
                 <th className="border border-border p-2">Email</th>
                 <th className="border border-border p-2">Role</th>
                 <th className="border border-border p-2">Enrollments</th>
+                <th className="border border-border p-2">Challenges</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +56,17 @@ export default function AdminDBPage() {
                       <ul>
                         {user.enrollments.map((enrollment) => (
                           <li key={enrollment.id}>{enrollment.course.name}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      "None"
+                    )}
+                  </td>
+                  <td className="border border-border p-2">
+                    {user.challengeParticipations.length > 0 ? (
+                      <ul>
+                        {user.challengeParticipations.map((participation) => (
+                          <li key={participation.id}>{participation.challenge.name}</li>
                         ))}
                       </ul>
                     ) : (
@@ -106,6 +118,45 @@ export default function AdminDBPage() {
           </table>
         ) : (
           <p>No courses found.</p>
+        )}
+      </section>
+
+      {/* Challenges Section */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Challenges</h2>
+        {data.challenges.length > 0 ? (
+          <table className="w-full border-collapse border border-border">
+            <thead>
+              <tr>
+                <th className="border border-border p-2">Challenge ID</th>
+                <th className="border border-border p-2">Name</th>
+                <th className="border border-border p-2">Description</th>
+                <th className="border border-border p-2">Participants</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.challenges.map((challenge) => (
+                <tr key={challenge.id}>
+                  <td className="border border-border p-2">{challenge.challengeId}</td>
+                  <td className="border border-border p-2">{challenge.name}</td>
+                  <td className="border border-border p-2">{challenge.description}</td>
+                  <td className="border border-border p-2">
+                    {challenge.participants.length > 0 ? (
+                      <ul>
+                        {challenge.participants.map((participant) => (
+                          <li key={participant.id}>{participant.user.email}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      "None"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No challenges found.</p>
         )}
       </section>
     </div>

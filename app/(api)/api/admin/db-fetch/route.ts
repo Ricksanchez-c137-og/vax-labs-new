@@ -11,6 +11,11 @@ export async function GET() {
             course: true,
           },
         },
+        challengeParticipations: {
+          include: {
+            challenge: true,
+          },
+        },
       },
     });
 
@@ -24,10 +29,21 @@ export async function GET() {
       },
     });
 
+    const challenges = await prisma.challenge.findMany({
+      include: {
+        participants: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
     return new Response(
       JSON.stringify({
         users,
         courses,
+        challenges,
       }),
       { status: 200 }
     );

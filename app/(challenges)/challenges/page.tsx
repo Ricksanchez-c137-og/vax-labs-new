@@ -1,90 +1,138 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function ChallengesPage() {
-  // Mock Data for Challenges (Replace with dynamic fetch from backend later)
-  const upcomingChallenges = [
-    { id: 1, name: "Network Penetration Challenge", description: "Test your network penetration skills in this hands-on challenge." },
-    { id: 2, name: "Active Directory Exploitation", description: "Simulate real-world AD exploitation scenarios." },
-  ];
+export default function Challenges() {
+  const [challenges, setChallenges] = useState([]);
+  const [enrolledChallenges, setEnrolledChallenges] = useState([]);
+  const router = useRouter();
 
-  const ongoingChallenges = [
-    { id: 3, name: "Phishing Simulation", description: "Learn and execute phishing attacks in a controlled environment." },
-    { id: 4, name: "SQL Injection Mastery", description: "Explore SQL injection techniques and mitigations." },
-  ];
+  useEffect(() => {
+    async function fetchChallenges() {
+      const res = await fetch("/api/challenges");
+      const data = await res.json();
+      setChallenges(data);
+    }
 
-  const completedChallenges = [
-    { id: 5, name: "Web Application Testing", description: "Master web app testing techniques with practical exercises." },
-    { id: 6, name: "Blue Team Simulation", description: "Strengthen your defensive skills with a blue team simulation." },
-  ];
+    async function fetchEnrolledChallenges() {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/challenges/enrolled", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setEnrolledChallenges(data);
+    }
+
+    fetchChallenges();
+    fetchEnrolledChallenges();
+  }, []);
+
+  const handleEnroll = async (challengeId) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch("/api/challenges/enroll", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ challengeId }),
+    });
+    if (res.ok) {
+      alert("Enrolled successfully!");
+      window.location.reload();
+    }
+  };
+
+  const handleOptOut = async (challengeId) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch("/api/challenges/enroll", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ challengeId }),
+    });
+    if (res.ok) {
+      alert("Opted out successfully!");
+      window.location.reload();
+    }
+  };
+
+  const handleViewChallenge = (challengeId) => {
+    router.push(`/challenges/${challengeId}?challengeId=${challengeId}`);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground font-ubuntu p-8">
       <header className="mb-8">
         <h1 className="text-3xl font-bold mb-4 text-primary">Challenges</h1>
         <p className="text-lg text-muted-foreground">
-          Explore upcoming, ongoing, and completed challenges to improve your skills.
+          Explore your enrolled challenges and discover new opportunities.
         </p>
       </header>
+
       <div className="space-y-12">
-        {/* Upcoming Challenges */}
+        {/* Enrolled Challenges */}
         <section>
-          <h2 className="text-2xl font-bold text-primary mb-4">Upcoming Challenges</h2>
+          <h2 className="text-2xl font-bold text-primary mb-4">Enrolled Challenges</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {upcomingChallenges.map((challenge) => (
-              <Link
-                key={challenge.id}
-                href={`/challenges/${challenge.id}`}
+            {enrolledChallenges.map((challenge) => (
+              <div
+                key={challenge.challengeId}
                 className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
               >
                 <div>
                   <h3 className="text-lg font-bold text-primary">{challenge.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">{challenge.description}</p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {challenge.description}
+                  </p>
                 </div>
-                <span className="mt-4 text-primary font-semibold hover:underline">View Details</span>
-              </Link>
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => handleViewChallenge(challenge.challengeId)}
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => handleOptOut(challenge.challengeId)}
+                    className="text-destructive font-semibold hover:underline"
+                  >
+                    Opt Out
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
-        {/* Ongoing Challenges */}
+        {/* Available Challenges */}
         <section>
-          <h2 className="text-2xl font-bold text-primary mb-4">Ongoing Challenges</h2>
+          <h2 className="text-2xl font-bold text-primary mb-4">Available Challenges</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ongoingChallenges.map((challenge) => (
-              <Link
-                key={challenge.id}
-                href={`/challenges/${challenge.id}`}
-                className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="text-lg font-bold text-primary">{challenge.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">{challenge.description}</p>
+            {challenges
+              .filter((challenge) => !enrolledChallenges.some((ec) => ec.id === challenge.id))
+              .map((challenge) => (
+                <div
+                  key={challenge.id}
+                  className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <h3 className="text-lg font-bold text-primary">{challenge.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {challenge.description}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleEnroll(challenge.challengeId)}
+                    className="mt-4 text-primary font-semibold hover:underline"
+                  >
+                    Enroll Now
+                  </button>
                 </div>
-                <span className="mt-4 text-primary font-semibold hover:underline">View Details</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Completed Challenges */}
-        <section>
-          <h2 className="text-2xl font-bold text-primary mb-4">Completed Challenges</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {completedChallenges.map((challenge) => (
-              <Link
-                key={challenge.id}
-                href={`/challenges/${challenge.id}`}
-                className="p-6 bg-card rounded-lg shadow hover:shadow-lg transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="text-lg font-bold text-primary">{challenge.name}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">{challenge.description}</p>
-                </div>
-                <span className="mt-4 text-primary font-semibold hover:underline">View Details</span>
-              </Link>
-            ))}
+              ))}
           </div>
         </section>
       </div>

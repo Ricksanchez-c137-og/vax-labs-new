@@ -20,6 +20,7 @@ model User {
   role      Role
   createdAt DateTime @default(now())
   enrollments Enrollment[]
+  challengeParticipations ChallengeParticipation[] // Add this line for the relation
 }
 
 model Course {
@@ -40,3 +41,26 @@ model Enrollment {
   user      User     @relation(fields: [userId], references: [id])
   course    Course   @relation(fields: [courseId], references: [id])
 }
+
+model Challenge {
+  id          String       @id @default(cuid())
+  challengeId String       @unique
+  name        String
+  description String
+  startDate   DateTime     @default(now())
+  endDate     DateTime     @default("2100-01-01T00:00:00.000Z")
+  participants ChallengeParticipation[]
+}
+
+model ChallengeParticipation {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  flag        String?  // Store generated flag
+  completed   Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId]) // Compound unique constraint
+}
+
