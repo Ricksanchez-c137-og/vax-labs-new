@@ -21,6 +21,10 @@ model User {
   createdAt DateTime @default(now())
   enrollments Enrollment[]
   challengeParticipations ChallengeParticipation[] // Add this line for the relation
+
+  vpn vpn[]
+
+  vmUser vmUser[]
 }
 
 model Course {
@@ -50,6 +54,10 @@ model Challenge {
   startDate   DateTime     @default(now())
   endDate     DateTime     @default("2100-01-01T00:00:00.000Z")
   participants ChallengeParticipation[]
+
+  Vms Vms[]
+
+  vpn vpn[]
 }
 
 model ChallengeParticipation {
@@ -62,5 +70,43 @@ model ChallengeParticipation {
   challenge   Challenge @relation(fields: [challengeId], references: [id])
 
   @@unique([userId, challengeId]) // Compound unique constraint
+}
+
+model Vms {
+  id          String   @id @default(cuid())
+  vmId        String   @unique
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  ip          String
+  port        Int
+  status      String
+  flag        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vmUser vmUser[]
+}
+
+model vpn {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  user        User     @relation(fields: [userId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  ip          String
+  port        Int
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model vmUser {
+  id         String   @id @default(cuid())
+  userId      String
+  vmId        String
+  user        User     @relation(fields: [userId], references: [id])
+  vm          Vms      @relation(fields: [vmId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
