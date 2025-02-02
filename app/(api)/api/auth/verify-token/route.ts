@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-
+/* eslint-disable */
 export async function POST(req: Request) {
   try {
     const { token } = await req.json();

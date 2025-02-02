@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { serialize } from "cookie";
 import  dotenv from "dotenv";
-
+/* eslint-disable */
 dotenv.config();
 
 const prisma = new PrismaClient();

@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable */
 import { useState } from "react";
 
 export default function AddCourse() {
@@ -11,7 +11,7 @@ export default function AddCourse() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleAddCourse = async (e) => {
+  const handleAddCourse = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);

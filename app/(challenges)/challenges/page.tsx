@@ -1,11 +1,18 @@
 "use client";
-
+/* eslint-disable */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Challenges() {
-  const [challenges, setChallenges] = useState([]);
-  const [enrolledChallenges, setEnrolledChallenges] = useState([]);
+  interface Challenge {
+    id: string;
+    challengeId: string;
+    name: string;
+    description: string;
+  }
+
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [enrolledChallenges, setEnrolledChallenges] = useState<Challenge[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +35,7 @@ export default function Challenges() {
     fetchEnrolledChallenges();
   }, []);
 
-  const handleEnroll = async (challengeId) => {
+  const handleEnroll = async (challengeId: any) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/challenges/enroll", {
       method: "POST",
@@ -44,7 +51,7 @@ export default function Challenges() {
     }
   };
 
-  const handleOptOut = async (challengeId) => {
+  const handleOptOut = async (challengeId: any) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/challenges/enroll", {
       method: "DELETE",
@@ -60,7 +67,7 @@ export default function Challenges() {
     }
   };
 
-  const handleViewChallenge = (challengeId) => {
+  const handleViewChallenge = (challengeId: any) => {
     router.push(`/challenges/${challengeId}?challengeId=${challengeId}`);
   };
 

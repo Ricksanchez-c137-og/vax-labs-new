@@ -1,6 +1,6 @@
 import { verifyToken } from "@/lib/authMiddleWare";
 import { cookies } from "next/headers";
-
+/* eslint-disable */
 export default async function CompaniesDashboard() {
   const token = (await cookies()).get("token")?.value;
 

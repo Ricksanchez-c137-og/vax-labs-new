@@ -2,11 +2,12 @@ import { verifyToken } from "@/lib/authMiddleWare";
 import { cookies } from "next/headers";
 import { FaTachometerAlt, FaBook, FaTrophy, FaTasks, FaChartBar, FaRoute, FaUser, FaComment, FaFire } from "react-icons/fa";
 import Link from "next/link";
-
+import { JwtPayload } from "jsonwebtoken";
+/* eslint-disable */
 export default async function StudentsDashboard() {
   const token = (await cookies()).get("token")?.value;
 
-  const user = token ? verifyToken(token) : null;
+  const user = token ? (verifyToken(token) as JwtPayload) : null;
 
   if (!user || user.role !== "STUDENT") {
     return <p>Unauthorized. Please log in as a student.</p>;

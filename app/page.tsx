@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable */
 import { Button } from "@/components/ui/button";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";

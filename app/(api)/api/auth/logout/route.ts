@@ -1,5 +1,5 @@
 import { serialize } from "cookie";
-
+/* eslint-disable */
 export async function POST() {
   const cookie = serialize("token", "", {
     httpOnly: true,

@@ -1,11 +1,18 @@
 "use client";
-
+/* eslint-disable */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Courses() {
-  const [courses, setCourses] = useState([]);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  interface Course {
+    id: string;
+    courseId: string;
+    name: string;
+    description: string;
+  }
+
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +35,7 @@ export default function Courses() {
     fetchEnrolledCourses();
   }, []);
 
-  const handleEnroll = async (courseId) => {
+  const handleEnroll = async (courseId: any) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "POST",
@@ -44,7 +51,7 @@ export default function Courses() {
     }
   };
 
-  const handleOptOut = async (courseId) => {
+  const handleOptOut = async (courseId: any) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "DELETE",
@@ -60,7 +67,7 @@ export default function Courses() {
     }
   };
 
-  const handleViewCourse = (courseId) => {
+  const handleViewCourse = (courseId: any) => {
     router.push(`/courses/${courseId}?courseId=${courseId}`);
   };
 

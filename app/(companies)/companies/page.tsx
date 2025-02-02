@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable */
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
 

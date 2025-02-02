@@ -3,7 +3,37 @@
 import { useEffect, useState } from "react";
 
 export default function AdminDBPage() {
-  const [data, setData] = useState(null);
+  interface User {
+    id: string;
+    email: string;
+    role: string;
+    enrollments: { id: string; course: { name: string } }[];
+    challengeParticipations: { id: string; challenge: { name: string } }[];
+  }
+
+  interface Course {
+    id: string;
+    courseId: string;
+    name: string;
+    description: string;
+    students: { id: string; user: { email: string } }[];
+  }
+
+  interface Challenge {
+    id: string;
+    challengeId: string;
+    name: string;
+    description: string;
+    participants: { id: string; user: { email: string } }[];
+  }
+
+  interface Data {
+    users: User[];
+    courses: Course[];
+    challenges: Challenge[];
+  }
+
+  const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -15,7 +45,11 @@ export default function AdminDBPage() {
         const fetchedData = await res.json();
         setData(fetchedData);
       } catch (err) {
-        setError(err.message || "An error occurred");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -34,7 +68,7 @@ export default function AdminDBPage() {
       {/* Users Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Users</h2>
-        {data.users.length > 0 ? (
+        {data && data.users.length > 0 ? (
           <table className="w-full border-collapse border border-border">
             <thead>
               <tr>
@@ -85,7 +119,7 @@ export default function AdminDBPage() {
       {/* Courses Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Courses</h2>
-        {data.courses.length > 0 ? (
+        {data && data.courses.length > 0 ? (
           <table className="w-full border-collapse border border-border">
             <thead>
               <tr>
@@ -124,7 +158,7 @@ export default function AdminDBPage() {
       {/* Challenges Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Challenges</h2>
-        {data.challenges.length > 0 ? (
+        {data && data.challenges.length > 0 ? (
           <table className="w-full border-collapse border border-border">
             <thead>
               <tr>
