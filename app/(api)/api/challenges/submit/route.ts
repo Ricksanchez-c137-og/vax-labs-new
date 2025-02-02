@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function POST(req: Request) {
     const token = req.headers.get("Authorization")?.split(" ")[1];
     if (!token) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
