@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
