@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     // Check if the user is already enrolled
     const existingEnrollment = await prisma.enrollment.findFirst({
-      where: { userId: decoded.id, courseId: course.id },
+      where: { userId: decoded.id, courseId: course.courseId },
     });
 
     if (existingEnrollment) {
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     // Enroll the student
     await prisma.enrollment.create({
-      data: { userId: decoded.id, courseId: course.id },
+      data: { userId: decoded.id, courseId: course.courseId },
     });
 
     return new Response(JSON.stringify({ message: "Enrolled successfully" }), { status: 200 });

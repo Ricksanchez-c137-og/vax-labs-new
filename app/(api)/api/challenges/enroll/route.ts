@@ -13,14 +13,17 @@ export async function POST(req: Request) {
 
   try {
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+
+    // ✅ Fetch the real challenge ID
     const challenge = await prisma.challenge.findUnique({ where: { challengeId } });
 
     if (!challenge) {
       return new Response(JSON.stringify({ error: "Challenge not found" }), { status: 404 });
     }
 
+    // ✅ Store both real challenge ID and challengeId
     await prisma.challengeParticipation.create({
-      data: { userId: decoded.id, challengeId: challenge.id },
+      data: { userId: decoded.id, challengeRealId: challenge.id, challengeId: challenge.challengeId },
     });
 
     return new Response(JSON.stringify({ message: "Enrolled successfully" }), { status: 200 });
@@ -29,6 +32,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 }
+
 
 export async function DELETE(req: Request) {
   const { challengeId } = await req.json();

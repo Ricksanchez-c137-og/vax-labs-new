@@ -11,7 +11,6 @@ export default function ChallengeDetails() {
   interface Challenge {
     name: string;
     description: string;
-    // Add other properties as needed
   }
 
   const [challenge, setChallenge] = useState<Challenge | null>(null);
@@ -86,7 +85,7 @@ export default function ChallengeDetails() {
 
       if (res.ok) {
         setCompleted(true);
-        setMessage("Challenge completed successfully!");
+        setMessage("🎉 Challenge completed successfully!");
       } else {
         const errorData = await res.json();
         setMessage(errorData.error || "Failed to submit flag.");
@@ -126,41 +125,102 @@ export default function ChallengeDetails() {
     setLoading(false);
   };
 
+  const handleUnenroll = async () => {
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("/api/challenges/enroll", {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ challengeId }),
+      });
+
+      if (res.ok) {
+        router.push("/challenges");
+      } else {
+        const errorData = await res.json();
+        setMessage(errorData.error || "Failed to unenroll.");
+      }
+    } catch (error) {
+      setMessage("An error occurred.");
+    }
+
+    setLoading(false);
+  };
+
   return (
-    <div className="p-6">
-      <h1>{challenge?.name}</h1>
-      <p>{challenge?.description}</p>
+    <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center">
+      <div className="w-full max-w-3xl bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-center text-yellow-400">{challenge?.name}</h1>
+        <p className="text-gray-300 text-center mt-2">{challenge?.description}</p>
 
-      {message && <p>{message}</p>}
+        {message && <p className="mt-4 text-center text-red-400">{message}</p>}
 
-      {!started && !completed && (
-        <button onClick={handleStart} disabled={loading}>
-          {loading ? "Starting..." : "Start Challenge"}
-        </button>
-      )}
+        {/* Action Buttons */}
+        <div className="mt-6 flex flex-col items-center space-y-4">
+          {!started && !completed && (
+            <button
+              onClick={handleStart}
+              disabled={loading}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold w-full text-center"
+            >
+              {loading ? "Starting..." : "🚀 Start Challenge"}
+            </button>
+          )}
 
-      {started && !completed && (
-        <>
-          <p>Challenge Flag: <a href={`/challenges/${challengeId}/flag`} target="_blank">View Flag</a></p>
-          <input
-            type="text"
-            value={userFlag}
-            onChange={(e) => setUserFlag(e.target.value)}
-            placeholder="Enter flag"
-          />
-          <button onClick={handleSubmit} disabled={loading}>
-            {loading ? "Submitting..." : "Submit Flag"}
+          {started && !completed && (
+            <>
+              <p className="text-green-400 text-center">Challenge Started! 🎯</p>
+              <a
+                href={`/challenges/${challengeId}/${flag}`}
+                target="_blank"
+                className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-semibold"
+              >
+                View Challenge Flag 🔍
+              </a>
+
+              <input
+                type="text"
+                value={userFlag}
+                onChange={(e) => setUserFlag(e.target.value)}
+                placeholder="Enter flag here..."
+                className="mt-4 px-4 py-2 w-full bg-gray-700 border border-gray-600 text-white rounded-lg"
+              />
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold w-full"
+              >
+                {loading ? "Submitting..." : "✅ Submit Flag"}
+              </button>
+            </>
+          )}
+
+          {completed && (
+            <p className="text-center text-green-400 font-bold text-xl">🎉 Challenge Completed!</p>
+          )}
+
+          {started && (
+            <button
+              onClick={handleReset}
+              disabled={loading}
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold w-full"
+            >
+              {loading ? "Resetting..." : "🔄 Reset Challenge"}
+            </button>
+          )}
+
+          <button
+            onClick={handleUnenroll}
+            disabled={loading}
+            className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold w-full"
+          >
+            {loading ? "Processing..." : "🚪 Unenroll from Challenge"}
           </button>
-        </>
-      )}
-
-      {completed && <p>Challenge completed!</p>}
-
-      {started && (
-        <button onClick={handleReset} disabled={loading}>
-          {loading ? "Resetting..." : "Reset Challenge"}
-        </button>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

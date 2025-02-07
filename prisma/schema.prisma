@@ -41,6 +41,7 @@ model Course {
 model Enrollment {
   id        String   @id @default(cuid())
   userId    String
+  courseRealId String @default("default_value")
   courseId  String
   user      User     @relation(fields: [userId], references: [id])
   course    Course   @relation(fields: [courseId], references: [id])
@@ -61,16 +62,19 @@ model Challenge {
 }
 
 model ChallengeParticipation {
-  id          String   @id @default(cuid())
-  userId      String
-  challengeId String
-  flag        String?  // Store generated flag
-  completed   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  id             String   @id @default(cuid())
+  userId         String
+  challengeRealId String  @default("default_value") // Store the actual Challenge ID
+  challengeId    String   // Store the user-facing unique challenge ID
+  flag          String?  // Store generated flag
+  completed     Boolean  @default(false)
+  hasStarted  Boolean  @default(false)  // ✅ New field to track challenge start
+  user          User     @relation(fields: [userId], references: [id])
+  challenge     Challenge @relation(fields: [challengeRealId], references: [id])
 
-  @@unique([userId, challengeId]) // Compound unique constraint
+  @@unique([userId, challengeRealId]) // Ensure a user can only enroll once in a challenge
 }
+
 
 model Vms {
   id          String   @id @default(cuid())
