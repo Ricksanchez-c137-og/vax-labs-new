@@ -51,7 +51,7 @@ export async function DELETE(req: Request) {
     }
 
     await prisma.challengeParticipation.deleteMany({
-      where: { userId: decoded.id, challengeId: challenge.id },
+      where: { userId: decoded.id, challengeRealId: challenge.id, challengeId: challenge.challengeId },
     });
 
     return new Response(JSON.stringify({ message: "Opted out successfully" }), { status: 200 });
