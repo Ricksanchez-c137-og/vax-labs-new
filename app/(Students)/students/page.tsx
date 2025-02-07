@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable */
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/components/home/Navbar";
 import { useRouter } from "next/navigation";
 
 export default function Students() {

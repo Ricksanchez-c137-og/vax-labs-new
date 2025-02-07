@@ -1,6 +1,6 @@
 {/*disable eslint*/ }
 
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/components/home/Navbar";
 
 export default function About() {
   return (
