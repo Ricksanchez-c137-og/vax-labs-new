@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -65,6 +65,7 @@ export default function ChallengeDetails() {
         setMessage(errorData.error || "Failed to start challenge.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred.");
     }
 
@@ -91,6 +92,7 @@ export default function ChallengeDetails() {
         setMessage(errorData.error || "Failed to submit flag.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred.");
     }
 
@@ -119,6 +121,7 @@ export default function ChallengeDetails() {
         setMessage(errorData.error || "Failed to reset challenge.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred.");
     }
 
@@ -144,6 +147,7 @@ export default function ChallengeDetails() {
         setMessage(errorData.error || "Failed to unenroll.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred.");
     }
 

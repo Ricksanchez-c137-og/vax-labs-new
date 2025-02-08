@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-/* eslint-disable */
+
 const prisma = new PrismaClient();
+
+interface DecodedToken {
+  id: string; // Adjust the type based on your JWT payload structure
+  // Add other properties if needed
+}
 
 export async function POST(req: Request) {
   const token = req.headers.get("Authorization")?.split(" ")[1];
@@ -15,7 +20,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
     const userId = decoded.id;
 
     // ✅ Retrieve the actual challenge ID from challengeId

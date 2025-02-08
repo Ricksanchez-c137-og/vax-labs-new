@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { serialize } from "cookie";
-/* eslint-disable */
+
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {

@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 import { FaTachometerAlt, FaBook, FaTrophy, FaTasks, FaChartBar, FaRoute, FaUser, FaComment, FaFire } from "react-icons/fa";
 import Link from "next/link";
 import { JwtPayload } from "jsonwebtoken";
-/* eslint-disable */
+import Image from "next/image";
+
 export default async function StudentsDashboard() {
   const token = (await cookies()).get("token")?.value;
 
@@ -36,10 +37,10 @@ export default async function StudentsDashboard() {
               <FaTasks className="text-2xl" />
               <span className="text-sm">Challenges</span>
             </a>
-            <a href="/courses" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
+            <Link href="/courses" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
               <FaTrophy className="text-2xl" />
               <span className="text-sm">Courses</span>
-            </a>
+            </Link>
             <a href="#" className="flex flex-col items-center space-y-2 text-muted-foreground hover:text-primary">
               <FaRoute className="text-2xl" />
               <span className="text-sm">Learning Path</span>
@@ -72,7 +73,7 @@ export default async function StudentsDashboard() {
           <div className="flex items-center space-x-4">
             <button className="relative">
               <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-              <img src="/bell-icon.png" alt="Notifications" className="h-6 w-6" />
+              <Image src="/bell-icon.png" alt="Notifications" width={24} height={24} className="h-6 w-6" />
             </button>
             <div className="bg-muted-foreground text-foreground px-4 py-2 rounded-full">Points: #</div>
             <div className="w-8 h-8 bg-muted-foreground rounded-full"></div>

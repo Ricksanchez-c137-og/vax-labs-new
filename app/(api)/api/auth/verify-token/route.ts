@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-/* eslint-disable */
+
 export async function POST(req: Request) {
   try {
     const { token } = await req.json();
@@ -12,6 +12,7 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify(verified), { status: 200 });
   } catch (error) {
+    console.log(error);
     return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
   }
 }

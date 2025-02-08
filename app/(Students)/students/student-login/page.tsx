@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
@@ -38,9 +38,14 @@ export default function Login() {
         const data = await res.json();
         setError(data.error || "An error occurred.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login error:", err);
-      setError(err.message || "An unexpected error occurred.");
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     }
   };
 

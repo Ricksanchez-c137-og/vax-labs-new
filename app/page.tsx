@@ -1,11 +1,8 @@
 "use client";
-/* eslint-disable */
-import { Button } from "@/components/ui/button";
+
 import Navbar from "@/components/home/Navbar";
-import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faEnvelope, faMapMarkerAlt, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { faLinkedin, faTwitter, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Hero from "@/components/home/Hero";
 import Offerings from "@/components/home/Offerings";

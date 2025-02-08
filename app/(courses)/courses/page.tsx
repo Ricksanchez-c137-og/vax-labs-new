@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -35,7 +35,7 @@ export default function Courses() {
     fetchEnrolledCourses();
   }, []);
 
-  const handleEnroll = async (courseId: any) => {
+  const handleEnroll = async (courseId: string) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "POST",
@@ -51,7 +51,7 @@ export default function Courses() {
     }
   };
 
-  const handleOptOut = async (courseId: any) => {
+  const handleOptOut = async (courseId: string) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/courses/enroll", {
       method: "DELETE",
@@ -67,7 +67,7 @@ export default function Courses() {
     }
   };
 
-  const handleViewCourse = (courseId: any) => {
+  const handleViewCourse = (courseId: string) => {
     router.push(`/courses/${courseId}?courseId=${courseId}`);
   };
 

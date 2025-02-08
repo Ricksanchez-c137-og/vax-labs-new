@@ -1,6 +1,6 @@
 import { verifyToken } from "@/lib/authMiddleWare";
 import { cookies } from "next/headers";
-/* eslint-disable */
+
 export default async function CompaniesDashboard() {
   const token = (await cookies()).get("token")?.value;
 
@@ -10,5 +10,5 @@ export default async function CompaniesDashboard() {
     return <p>Unauthorized. Please log in as a company.</p>;
   }
 
-  return <p>Welcome to the Companies' Dashboard!</p>;
+  return <p>Welcome to the Companies&apos Dashboard!</p>;
 }

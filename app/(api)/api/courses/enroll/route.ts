@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
-/* eslint-disable */
+
 const prisma = new PrismaClient();
+
+interface DecodedToken {
+  id: string; // Adjust the type based on your JWT payload structure
+  // Add other properties if needed
+}
 
 export async function POST(req: Request) {
   const { courseId } = await req.json();
@@ -11,9 +16,10 @@ export async function POST(req: Request) {
     console.error("Missing token in request headers.");
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
+  
 
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
     console.log("Decoded JWT:", decoded);
     console.log("Course ID received:", courseId);
 
@@ -59,7 +65,7 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
     console.log("Decoded JWT:", decoded);
 
     if (!courseId) {

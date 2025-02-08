@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import Navbar from "@/components/home/Navbar";
 import { useRouter } from "next/navigation";
 
@@ -21,7 +21,7 @@ export default function Students() {
         {/* Page Header */}
         <h1 className="text-5xl font-extrabold text-primary mb-4">Empower Your Cybersecurity Journey</h1>
         <p className="text-lg max-w-4xl mx-auto mb-10">
-          Dive into hands-on challenges designed to enhance your cybersecurity skills and prepare you for real-world scenarios. Whether you're a student seeking knowledge or a professional building expertise, VaxLabs is your ultimate training ground.
+          Dive into hands-on challenges designed to enhance your cybersecurity skills and prepare you for real-world scenarios. Whether you&aposre a student seeking knowledge or a professional building expertise, VaxLabs is your ultimate training ground.
         </p>
 
         {/* Call-to-Actions */}

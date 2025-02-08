@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -35,7 +35,7 @@ export default function Challenges() {
     fetchEnrolledChallenges();
   }, []);
 
-  const handleEnroll = async (challengeId: any) => {
+  const handleEnroll = async (challengeId: string) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/challenges/enroll", {
       method: "POST",
@@ -51,7 +51,7 @@ export default function Challenges() {
     }
   };
 
-  const handleOptOut = async (challengeId: any) => {
+  const handleOptOut = async (challengeId: string) => {
     const token = localStorage.getItem("token");
     const res = await fetch("/api/challenges/enroll", {
       method: "DELETE",
@@ -67,7 +67,7 @@ export default function Challenges() {
     }
   };
 
-  const handleViewChallenge = (challengeId: any) => {
+  const handleViewChallenge = (challengeId: string) => {
     router.push(`/challenges/${challengeId}?challengeId=${challengeId}`);
   };
 

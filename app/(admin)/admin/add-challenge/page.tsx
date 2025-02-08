@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useState } from "react";
 
 export default function AddChallenge() {
@@ -42,6 +42,7 @@ export default function AddChallenge() {
         setMessage(data.error || "An error occurred.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred while adding the challenge.");
     } finally {
       setLoading(false);

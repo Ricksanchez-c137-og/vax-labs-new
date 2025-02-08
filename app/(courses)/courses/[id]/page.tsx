@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable */
+
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -44,6 +44,7 @@ export default function CourseDetails() {
           setMessage(errorData.error || "Course not found.");
         }
       } catch (error) {
+        console.log(error);
         setMessage("An error occurred while fetching course details.");
       }
     }
@@ -77,6 +78,7 @@ export default function CourseDetails() {
         setMessage(errorData.error || "An error occurred.");
       }
     } catch (error) {
+      console.log(error);
       setMessage("An error occurred while processing your request.");
     }
     setLoading(false);
