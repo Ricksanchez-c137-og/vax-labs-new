@@ -16,7 +16,7 @@ export default function Offerings() {
     <section className="bg-background p-12 font-ubuntu">
       <h2 className="text-5xl font-bold text-center mb-6 text-primary">What Do We Offer?</h2>
       <p className="text-lg text-center max-w-4xl mx-auto mb-12">
-        VaxLabs provides a wide range of challenges to help individuals and teams develop the hands-on skills needed in cybersecurity. Whether you&aposre a student looking to complement your studies or a company looking to train your employees, we offer challenges that simulate real-world scenarios.
+        VaxLabs provides a wide range of challenges to help individuals and teams develop the hands-on skills needed in cybersecurity. Whether you are a student looking to complement your studies or a company looking to train your employees, we offer challenges that simulate real-world scenarios.
       </p>
       <div className="space-y-4 max-w-4xl mx-auto">
         {challenges.map((challenge, index) => (
