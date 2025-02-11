@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { JwtPayload } from "jsonwebtoken";
+import { withAuth } from "@/lib/auth/withAuth";
 
-export default function Challenges() {
+function Challenges({ user }: { user: JwtPayload }) {
   interface Challenge {
     id: string;
     challengeId: string;
@@ -146,3 +148,5 @@ export default function Challenges() {
     </div>
   );
 }
+
+export default withAuth(Challenges, "STUDENT");

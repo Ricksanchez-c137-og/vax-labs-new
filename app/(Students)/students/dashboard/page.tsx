@@ -1,19 +1,46 @@
-import { verifyToken } from "@/lib/authMiddleWare";
-import { cookies } from "next/headers";
-import { JwtPayload } from "jsonwebtoken";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import ChallengesGrid from "@/components/dashboard/ChallengesGrid";
 import LearningPathsGrid from "@/components/dashboard/LearningPathsGrid";
 import CoursesGrid from "@/components/dashboard/CoursesGrid";
+import { JwtPayload } from "jwt-decode";
 
-export default async function StudentsDashboard() {
-  const token = (await cookies()).get("token")?.value;
-  const user = token ? (verifyToken(token) as JwtPayload) : null;
+interface DecodedToken extends JwtPayload {
+  roll?: string;
+  name?: string;
+  role: string;
+}
 
-  if (!user || user.role !== "STUDENT") {
-    return <p>Unauthorized. Please log in as a student.</p>;
-  }
+export default function StudentsDashboard() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/students/student-login");
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token) as { role: string };
+      if (decoded.role !== "STUDENT") {
+        router.push("/students/student-login");
+      }
+    } catch (error) {
+      router.push("/students/student-login");
+    }
+  }, [router]);
+
+  const user = localStorage.getItem("token") 
+    ? jwtDecode(localStorage.getItem("token")!) as DecodedToken
+    : null;
+
+  if (!user) return null;
 
   return (
     <div className="flex h-screen bg-[#1E1E1E] text-white">
