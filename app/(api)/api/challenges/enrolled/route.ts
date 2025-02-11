@@ -14,7 +14,8 @@ export async function GET(req: Request) {
   if (!token) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+	  const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+	  console.log(decoded);
     const participations = await prisma.challengeParticipation.findMany({
       where: { userId: decoded.id },
       include: { challenge: true },

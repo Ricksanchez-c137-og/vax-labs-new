@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { withAuth } from "@/lib/auth/withAuth";
+import { JwtPayload } from "jsonwebtoken";
 
 interface Course {
   id: string;
@@ -11,7 +13,7 @@ interface Course {
   endDate: string;
 }
 
-export default function CourseDetails() {
+function CourseDetails({ user }: { user: JwtPayload }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseId = searchParams.get("courseId"); // Get courseId from searchParams
@@ -141,3 +143,5 @@ export default function CourseDetails() {
     </div>
   );
 }
+
+export default withAuth(CourseDetails, "STUDENT");
