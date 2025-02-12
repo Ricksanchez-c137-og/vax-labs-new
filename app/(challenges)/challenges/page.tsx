@@ -52,7 +52,7 @@ function Challenges({ user }: { user: JwtPayload }) {
 
     fetchChallenges();
     fetchEnrolledChallenges();
-  }, [router]);
+  }, [router, user]);
 
   const handleEnroll = async (challengeId: string) => {
     const token = localStorage.getItem("token");

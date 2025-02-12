@@ -53,7 +53,7 @@ function CourseDetails({ user }: { user: JwtPayload }) {
     
 
     fetchCourseDetails();
-  }, [courseId]);
+  }, [courseId, user]);
 
   const handleAction = async (action: "enroll" | "optOut") => {
     if (!courseId) return;

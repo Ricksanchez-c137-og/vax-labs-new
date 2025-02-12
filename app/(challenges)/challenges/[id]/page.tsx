@@ -45,7 +45,7 @@ function ChallengeDetails({ user }: { user: JwtPayload }) {
     }
 
     fetchChallengeDetails();
-  }, [challengeId]);
+  }, [router, user, challengeId]);
 
   const handleStart = async () => {
     setLoading(true);
