@@ -21,7 +21,7 @@ export default function About() {
           By addressing the shortage of skilled cybersecurity professionals, VaxLabs aims to contribute to a more secure digital landscape in critical sectors such as finance, energy, and government. Our platform not only helps users build essential skills but also connects them with opportunities for professional growth.
         </p>
         <p className="text-lg max-w-4xl mx-auto">
-          Join VaxLabs today and take your cybersecurity expertise to the next level with practical, gamified learning that prepares you for real-world scenarios.
+          Join Us today and take your cybersecurity expertise to the next level with practical, gamified learning that prepares you for real-world scenarios.
         </p>
       </section>
     </div>
