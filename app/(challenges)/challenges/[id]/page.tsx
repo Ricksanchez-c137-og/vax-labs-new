@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -19,143 +20,111 @@ function ChallengeDetails({ user }: { user: JwtPayload }) {
   const [flag, setFlag] = useState("");
   const [userFlag, setUserFlag] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Initial loading state
   const [started, setStarted] = useState(false);
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    // Fetch challenge details
     async function fetchChallengeDetails() {
-      if (!challengeId) return setMessage("Invalid challenge ID.");
+      try {
+        if (!challengeId) return setMessage("Invalid challenge ID.");
 
-      const token = localStorage.getItem("token");
-      const res = await fetch(`/api/challenges/${challengeId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(user);
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (!token) {
+          router.push("/students/student-login");
+          return;
+        }
 
-      if (res.ok) {
-        const data = await res.json();
-        setChallenge(data.challenge);
-        setCompleted(data.completed);
-      } else {
-        const errorData = await res.json();
-        setMessage(errorData.error || "Challenge not found.");
+        const res = await fetch(`/api/challenges/${challengeId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setChallenge(data.challenge);
+          setCompleted(data.completed);
+        } else {
+          const errorData = await res.json();
+          setMessage(errorData.error || "Challenge not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching challenge details:", error);
+        setMessage("An error occurred while fetching the challenge.");
+      } finally {
+        setLoading(false);
       }
     }
 
-    fetchChallengeDetails();
+    if (typeof window !== "undefined") {
+      fetchChallengeDetails();
+    }
   }, [router, user, challengeId]);
 
-  const handleStart = async () => {
+  const handleAction = async (endpoint: string, method: string, body: object = {}) => {
     setLoading(true);
     setMessage("");
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/api/challenges/start", {
-        method: "POST",
+      const res = await fetch(endpoint, {
+        method,
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ challengeId }),
+        body: JSON.stringify(body),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        setFlag(data.flag);
-        setStarted(true);
-      } else {
+      if (!res.ok) {
         const errorData = await res.json();
-        setMessage(errorData.error || "Failed to start challenge.");
+        throw new Error(errorData.error || "An error occurred.");
       }
-    } catch (error) {
-      console.log(error);
-      setMessage("An error occurred.");
-    }
 
-    setLoading(false);
+      return await res.json();
+    } catch (error: any) {
+      console.error(error);
+      setMessage(error.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStart = async () => {
+    const data = await handleAction("/api/challenges/start", "POST", { challengeId });
+    if (data) {
+      setFlag(data.flag);
+      setStarted(true);
+    }
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/challenges/submit", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ challengeId, submittedFlag: userFlag }),
-      });
-
-      if (res.ok) {
-        setCompleted(true);
-        setMessage("🎉 Challenge completed successfully!");
-      } else {
-        const errorData = await res.json();
-        setMessage(errorData.error || "Failed to submit flag.");
-      }
-    } catch (error) {
-      console.log(error);
-      setMessage("An error occurred.");
+    const data = await handleAction("/api/challenges/submit", "POST", {
+      challengeId,
+      submittedFlag: userFlag,
+    });
+    if (data) {
+      setCompleted(true);
+      setMessage("🎉 Challenge completed successfully!");
     }
-
-    setLoading(false);
   };
 
   const handleReset = async () => {
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/challenges/reset", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ challengeId }),
-      });
-
-      if (res.ok) {
-        setFlag("");
-        setStarted(false);
-        setCompleted(false);
-        setMessage("Challenge reset.");
-      } else {
-        const errorData = await res.json();
-        setMessage(errorData.error || "Failed to reset challenge.");
-      }
-    } catch (error) {
-      console.log(error);
-      setMessage("An error occurred.");
+    const data = await handleAction("/api/challenges/reset", "POST", { challengeId });
+    if (data) {
+      setFlag("");
+      setStarted(false);
+      setCompleted(false);
+      setMessage("Challenge reset.");
     }
-
-    setLoading(false);
   };
 
   const handleUnenroll = async () => {
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/challenges/enroll", {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ challengeId }),
-      });
-
-      if (res.ok) {
-        router.push("/challenges");
-      } else {
-        const errorData = await res.json();
-        setMessage(errorData.error || "Failed to unenroll.");
-      }
-    } catch (error) {
-      console.log(error);
-      setMessage("An error occurred.");
+    const data = await handleAction("/api/challenges/enroll", "DELETE", { challengeId });
+    if (data) {
+      router.push("/challenges");
     }
-
-    setLoading(false);
   };
+
+  if (loading) {
+    return <p className="text-center text-white">Loading...</p>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 flex flex-col items-center">
@@ -165,7 +134,6 @@ function ChallengeDetails({ user }: { user: JwtPayload }) {
 
         {message && <p className="mt-4 text-center text-red-400">{message}</p>}
 
-        {/* Action Buttons */}
         <div className="mt-6 flex flex-col items-center space-y-4">
           {!started && !completed && (
             <button
