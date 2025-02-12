@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { JwtPayload } from "jsonwebtoken";
 import { withAuth } from "@/lib/auth/withAuth";
 
-function Challenges({ user}: { user: JwtPayload }) {
+function Challenges({ user }: { user: JwtPayload }) {
   interface Challenge {
     id: string;
     challengeId: string;
@@ -20,19 +20,22 @@ function Challenges({ user}: { user: JwtPayload }) {
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchChallenges() {
+    const fetchChallenges = async () => {
       try {
         const res = await fetch("/api/challenges");
+        if (!res.ok) throw new Error("Failed to fetch challenges");
         const data = await res.json();
         setChallenges(data);
       } catch (error) {
         console.error("Error fetching challenges:", error);
       }
-    }
+    };
 
-    async function fetchEnrolledChallenges() {
+    const fetchEnrolledChallenges = async () => {
       try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (typeof window === "undefined") return;
+
+        const token = localStorage.getItem("token");
         if (!token) {
           router.push("/students/student-login");
           return;
@@ -48,19 +51,19 @@ function Challenges({ user}: { user: JwtPayload }) {
           return;
         }
 
-        if (res.ok) {
-          const data = await res.json();
-          setEnrolledChallenges(data);
-        } else {
+        if (!res.ok) {
           const errorData = await res.json();
-          console.error("Error fetching enrolled challenges:", errorData.error);
+          throw new Error(errorData.error || "Failed to fetch enrolled challenges.");
         }
+
+        const data = await res.json();
+        setEnrolledChallenges(data);
       } catch (error) {
-        console.error("Error in fetchEnrolledChallenges:", error);
+        console.error("Error fetching enrolled challenges:", error);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     if (typeof window !== "undefined") {
       fetchChallenges();
