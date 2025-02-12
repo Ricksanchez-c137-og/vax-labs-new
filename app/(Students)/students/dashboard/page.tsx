@@ -32,6 +32,7 @@ export default function StudentsDashboard() {
         router.push("/students/student-login");
       }
     } catch (error) {
+      console.error(error);
       router.push("/students/student-login");
     }
   }, [router]);

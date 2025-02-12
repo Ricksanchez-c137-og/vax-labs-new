@@ -36,7 +36,7 @@ function CourseDetails({ user }: { user: JwtPayload }) {
         const res = await fetch(`/api/courses/${courseId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-    
+        console.log(user);
         if (res.ok) {
           const data = await res.json();
           setCourse(data.course);

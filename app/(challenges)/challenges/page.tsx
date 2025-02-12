@@ -30,7 +30,7 @@ function Challenges({ user }: { user: JwtPayload }) {
         const res = await fetch("/api/challenges/enrolled", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+        console.log(user);
         if (res.status === 401) {
           // Token is invalid or expired
           localStorage.removeItem("token"); // Clear the token

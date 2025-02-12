@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { JwtPayload } from "jwt-decode";
+import { JWTUser } from "@/lib/auth/withAuth";
 import { withAuth } from "@/lib/auth/withAuth";
 
 interface Course {
@@ -12,7 +12,7 @@ interface Course {
   description: string;
 }
 
-function Courses({ user }: { user: JwtPayload }) {
+function Courses({ user }: { user: JWTUser }) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const router = useRouter();
@@ -39,6 +39,7 @@ function Courses({ user }: { user: JwtPayload }) {
 
   const handleEnroll = async (courseId: string) => {
     const token = localStorage.getItem("token");
+    console.log(user);
     const res = await fetch("/api/courses/enroll", {
       method: "POST",
       headers: {

@@ -24,6 +24,7 @@ export function useAuth(requiredRole?: string) {
         router.push("/students/student-login");
       }
     } catch (error) {
+      console.error(error);
       router.push("/students/student-login");
     }
   }, [router, requiredRole]);
