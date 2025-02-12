@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { ComponentType } from "react";
@@ -17,6 +17,8 @@ interface WithAuthProps {
 export function withAuth(Component: ComponentType<WithAuthProps>, requiredRole?: string) {
   return function AuthenticatedComponent(props: Omit<WithAuthProps, 'user'>) {
     const router = useRouter();
+    const [user, setUser] = useState<JWTUser | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       const token = localStorage.getItem("token");
@@ -30,16 +32,20 @@ export function withAuth(Component: ComponentType<WithAuthProps>, requiredRole?:
         const decoded = jwtDecode(token) as JWTUser;
         if (requiredRole && decoded.role !== requiredRole) {
           router.push("/students/student-login");
+          return;
         }
+        setUser(decoded);
       } catch (error) {
         console.log(error);
         router.push("/students/student-login");
+      } finally {
+        setLoading(false);
       }
     }, [router]);
 
-    // Get user info from token
-    const token = localStorage.getItem("token");
-    const user = token ? (jwtDecode(token) as JWTUser) : null;
+    if (loading) {
+      return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    }
 
     if (!user) return null;
 
