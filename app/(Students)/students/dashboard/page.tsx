@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import Sidebar from "@/components/dashboard/Sidebar";
@@ -18,30 +18,31 @@ interface DecodedToken extends JwtPayload {
 
 export default function StudentsDashboard() {
   const router = useRouter();
+  const [user, setUser] = useState<DecodedToken | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/students/student-login");
-      return;
-    }
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/students/student-login");
+        return;
+      }
 
-    try {
-      const decoded = jwtDecode(token) as { role: string };
-      if (decoded.role !== "STUDENT") {
+      try {
+        const decoded = jwtDecode(token) as DecodedToken;
+        if (decoded.role !== "STUDENT") {
+          router.push("/students/student-login");
+        } else {
+          setUser(decoded);
+        }
+      } catch (error) {
+        console.error(error);
         router.push("/students/student-login");
       }
-    } catch (error) {
-      console.error(error);
-      router.push("/students/student-login");
     }
   }, [router]);
 
-  const user = localStorage.getItem("token") 
-    ? jwtDecode(localStorage.getItem("token")!) as DecodedToken
-    : null;
-
-  if (!user) return null;
+  if (!user) return null; 
 
   return (
     <div className="flex h-screen bg-[#1E1E1E] text-white">
