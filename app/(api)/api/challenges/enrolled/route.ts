@@ -29,7 +29,9 @@ export async function GET(req: Request) {
   try {
     // Verify JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
-    
+    if(!decoded) {
+		return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
+	}
     // Verify user role
     if (decoded.role !== "STUDENT") {
       return new Response(

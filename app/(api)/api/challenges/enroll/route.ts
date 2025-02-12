@@ -50,6 +50,9 @@ export async function DELETE(req: Request) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+	if(!decoded) {
+		return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
+	}
     const challenge = await prisma.challenge.findUnique({ where: { challengeId } });
 
     if (!challenge) {

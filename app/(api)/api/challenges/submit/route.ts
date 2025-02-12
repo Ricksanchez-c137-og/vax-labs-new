@@ -12,6 +12,9 @@ export async function POST(req: Request) {
   
     try {
       const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+	  if(!decoded) {
+		return new Response(JSON.stringify({ error: "Invalid token" }), { status: 401 });
+	  }
       const userId = decoded.id;
   
       const participation = await prisma.challengeParticipation.findFirst({
