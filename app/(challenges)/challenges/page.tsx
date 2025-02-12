@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { JwtPayload } from "jsonwebtoken";
+import { withAuth } from "@/lib/auth/withAuth";
 
-export default function Challenges() {
+function Challenges({ user }: { user: JwtPayload }) {
   interface Challenge {
     id: string;
     challengeId: string;
@@ -23,17 +25,34 @@ export default function Challenges() {
     }
 
     async function fetchEnrolledChallenges() {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/challenges/enrolled", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      setEnrolledChallenges(data);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("/api/challenges/enrolled", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.status === 401) {
+          // Token is invalid or expired
+          localStorage.removeItem("token"); // Clear the token
+          router.push("/students/student-login"); // Redirect to login
+          return;
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          setEnrolledChallenges(data);
+        } else {
+          const errorData = await res.json();
+          console.error("Error fetching enrolled challenges:", errorData.error);
+        }
+      } catch (error) {
+        console.error("Error in fetchEnrolledChallenges:", error);
+      }
     }
 
     fetchChallenges();
     fetchEnrolledChallenges();
-  }, []);
+  }, [router]);
 
   const handleEnroll = async (challengeId: string) => {
     const token = localStorage.getItem("token");
@@ -146,3 +165,5 @@ export default function Challenges() {
     </div>
   );
 }
+
+export default withAuth(Challenges, "STUDENT");

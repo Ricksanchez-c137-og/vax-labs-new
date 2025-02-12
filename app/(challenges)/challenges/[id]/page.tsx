@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { withAuth } from "@/lib/auth/withAuth";
+import { JwtPayload } from "jsonwebtoken";
 
-export default function ChallengeDetails() {
+function ChallengeDetails({ user }: { user: JwtPayload }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const challengeId = searchParams.get("challengeId");
@@ -228,3 +230,5 @@ export default function ChallengeDetails() {
     </div>
   );
 }
+
+export default withAuth(ChallengeDetails, "STUDENT");

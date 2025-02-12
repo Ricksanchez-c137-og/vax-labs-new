@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { JwtPayload } from "jwt-decode";
+import { withAuth } from "@/lib/auth/withAuth";
 
-export default function Courses() {
-  interface Course {
-    id: string;
-    courseId: string;
-    name: string;
-    description: string;
-  }
+interface Course {
+  id: string;
+  courseId: string;
+  name: string;
+  description: string;
+}
 
+function Courses({ user }: { user: JwtPayload }) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const router = useRouter();
@@ -146,3 +148,5 @@ export default function Courses() {
     </div>
   );
 }
+
+export default withAuth(Courses, "STUDENT");
